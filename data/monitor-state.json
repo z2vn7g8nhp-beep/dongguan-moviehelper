@@ -57,6 +57,29 @@
   ],
   "movies": [
     {
+      "id": "movie-avengers-5",
+      "title": "复仇者联盟5",
+      "aliases": [
+        "复联5",
+        "毁灭之日",
+        "毁灭日",
+        "Avengers: Doomsday"
+      ],
+      "maoyanMovieId": "",
+      "posterUrl": "/src/assets/images/poster_stellar_horizon_1794981941611.jpg",
+      "targetFormats": [
+        "IMAX GT",
+        "IMAX"
+      ],
+      "isStarred": true,
+      "manuallyStopped": false,
+      "alertRoundsCount": 0,
+      "lastAlertAt": null,
+      "seenShowKeys": [],
+      "createdAt": "2026-11-17T23:00:00.000Z",
+      "notes": "重点蹲华南MALL IMAX GT 激光厅首开与加场（兼容复联5/毁灭之日）"
+    },
+    {
       "id": "movie-odyssey",
       "title": "奥德赛",
       "maoyanMovieId": "1545360",
@@ -65,7 +88,7 @@
         "IMAX GT",
         "IMAX"
       ],
-      "isStarred": true,
+      "isStarred": false,
       "manuallyStopped": false,
       "alertRoundsCount": 1,
       "lastAlertAt": "2026-11-18T06:26:30.851Z",
@@ -102,7 +125,7 @@
       "targetFormats": [
         "全制式"
       ],
-      "isStarred": true,
+      "isStarred": false,
       "manuallyStopped": false,
       "alertRoundsCount": 0,
       "lastAlertAt": null,
@@ -410,8 +433,8 @@
     "lastSuccessAt": "2026-11-18T06:26:30.851Z",
     "totalChecks": 3,
     "totalBlocks": 0,
-    "nextCheckAt": "2026-11-18T06:27:37.959Z",
-    "lastIntervalMs": 67104
+    "nextCheckAt": "2026-11-18T07:47:21.447Z",
+    "lastIntervalMs": 53207
   },
   "pushConfig": {
     "browserNotificationEnabled": true,
@@ -424,5 +447,5 @@
     "dingtalkWebhook": "",
     "customWebhookUrl": ""
   },
-  "updatedAt": "2026-11-18T06:26:30.855Z"
+  "updatedAt": "2026-11-18T07:46:28.240Z"
 }

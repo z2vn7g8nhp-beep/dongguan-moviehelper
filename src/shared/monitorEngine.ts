@@ -77,7 +77,7 @@ export const DEFAULT_MOVIES: MovieWatchItem[] = [
     maoyanMovieId: '1545360',
     posterUrl: '/src/assets/images/poster_dune_odyssey_1794981941105.jpg',
     targetFormats: ['IMAX GT', 'IMAX'],
-    isStarred: true,
+    isStarred: false,
     manuallyStopped: false,
     alertRoundsCount: 0,
     lastAlertAt: null,
@@ -91,7 +91,7 @@ export const DEFAULT_MOVIES: MovieWatchItem[] = [
     maoyanMovieId: '1504118',
     posterUrl: '/src/assets/images/poster_ne_zha_storm_1794981940862.jpg',
     targetFormats: ['全制式'],
-    isStarred: true,
+    isStarred: false,
     manuallyStopped: false,
     alertRoundsCount: 0,
     lastAlertAt: null,
@@ -667,7 +667,7 @@ async function runOnce(cache, config) {
   const normalizeTitle = (s) =>
     String(s || '')
       .toLowerCase()
-      .replace(/[\s·：:，,。.!！?？\-—()（）《》【】\[\]]+/g, '')
+      .replace(/[\\s·：:，,。.!！?？\\-—()（）《》【】\\[\\]]+/g, '')
       .trim();
   const isTitleMatch = (watch, candidateTitle) => {
     const cand = normalizeTitle(candidateTitle);
