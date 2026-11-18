@@ -13,12 +13,12 @@ import type {
 export const DEFAULT_CINEMAS: Cinema[] = [
   {
     id: 'dongguan-huanan-mall-wanda',
-    name: '万达影城（华南MALL IMAX GT店）',
+    name: '万达影城（华南MALL-IMAXGT激光店）',
     shortName: '华南MALL万达 IMAX GT',
-    district: '东莞万江 · 华南MALL',
+    district: '东莞万江 · 华南MALL D区3层',
     brand: '万达影城',
     featuredFormats: ['IMAX GT 激光', '4DX', 'VIP厅'],
-    maoyanCinemaId: '15648',
+    maoyanCinemaId: '1485',
     enabled: true,
     lastCheckedAt: null,
     lastStatus: 'idle',
@@ -29,10 +29,10 @@ export const DEFAULT_CINEMAS: Cinema[] = [
     id: 'dongguan-dongcheng-wanda',
     name: '万达影城（东城万达广场IMAX店）',
     shortName: '东城万达 IMAX',
-    district: '东莞东城 · 东城万达广场',
+    district: '东莞东城 · 东城万达广场4层',
     brand: '万达影城',
     featuredFormats: ['IMAX 激光', '杜比全景声', 'Prime'],
-    maoyanCinemaId: '11092',
+    maoyanCinemaId: '10418',
     enabled: true,
     lastCheckedAt: null,
     lastStatus: 'idle',
@@ -41,12 +41,12 @@ export const DEFAULT_CINEMAS: Cinema[] = [
   },
   {
     id: 'dongguan-minying-guomao-cgv',
-    name: 'CGV影城（民盈·国贸城IMAX激光店）',
+    name: 'CGV影城（民盈·国贸城店）',
     shortName: '民盈国贸城 CGV',
-    district: '东莞南城 · 民盈国贸城',
+    district: '东莞东城/南城交界 · 民盈国贸城4层',
     brand: 'CGV影城',
-    featuredFormats: ['IMAX 激光', 'ScreenX', 'GOLD CLASS'],
-    maoyanCinemaId: '26341',
+    featuredFormats: ['IMAX', 'ScreenX', 'GOLD CLASS'],
+    maoyanCinemaId: '26100',
     enabled: true,
     lastCheckedAt: null,
     lastStatus: 'idle',
@@ -57,21 +57,18 @@ export const DEFAULT_CINEMAS: Cinema[] = [
 
 export const DEFAULT_MOVIES: MovieWatchItem[] = [
   {
-    id: 'movie-dune-3',
-    title: '沙丘3：救世主',
-    maoyanMovieId: '1498201',
+    id: 'movie-odyssey',
+    title: '奥德赛',
+    maoyanMovieId: '1545360',
     posterUrl: '/src/assets/images/poster_dune_odyssey_1794981941105.jpg',
     targetFormats: ['IMAX GT', 'IMAX'],
     isStarred: true,
     manuallyStopped: false,
-    alertRoundsCount: 1,
-    lastAlertAt: '2026-11-17T21:15:00.000Z',
-    seenShowKeys: [
-      'dongguan-huanan-mall-wanda|2026-11-20|19:30|1号IMAX GT激光厅|IMAX GT',
-      'dongguan-huanan-mall-wanda|2026-11-20|22:20|1号IMAX GT激光厅|IMAX GT',
-    ],
+    alertRoundsCount: 0,
+    lastAlertAt: null,
+    seenShowKeys: [],
     createdAt: '2026-11-17T18:00:00.000Z',
-    notes: '优先锁定华南MALL IMAX GT 1.43:1画幅黄金场',
+    notes: '优先锁定华南MALL IMAX GT 激光厅黄金场',
   },
   {
     id: 'movie-nezha-storm',
@@ -103,54 +100,17 @@ export const DEFAULT_MOVIES: MovieWatchItem[] = [
   },
 ];
 
-export const DEFAULT_ALERT_ROUNDS: AlertRound[] = [
-  {
-    id: 'round-seed-1',
-    movieId: 'movie-dune-3',
-    movieTitle: '沙丘3：救世主',
-    roundNumber: 1,
-    detectedAt: '2026-11-17T21:15:00.000Z',
-    source: 'sandbox_sim',
-    cinemaNames: ['华南MALL万达 IMAX GT'],
-    newShowtimes: [
-      {
-        cinemaId: 'dongguan-huanan-mall-wanda',
-        cinemaName: '华南MALL万达 IMAX GT',
-        movieTitle: '沙丘3：救世主',
-        showDate: '2026-11-20',
-        showTime: '19:30',
-        hallName: '1号IMAX GT激光厅',
-        format: 'IMAX GT',
-        language: '英语 原版2D',
-        priceYuan: 98,
-      },
-      {
-        cinemaId: 'dongguan-huanan-mall-wanda',
-        cinemaName: '华南MALL万达 IMAX GT',
-        movieTitle: '沙丘3：救世主',
-        showDate: '2026-11-20',
-        showTime: '22:20',
-        hallName: '1号IMAX GT激光厅',
-        format: 'IMAX GT',
-        language: '英语 原版2D',
-        priceYuan: 89,
-      },
-    ],
-    deliveryResults: [
-      {
-        channel: '浏览器本地告警',
-        ok: true,
-        message: '已记录第 1 轮开票事件，持续等待后续加场开票',
-      },
-    ],
-  },
-];
+export const DEFAULT_ALERT_ROUNDS: AlertRound[] = [];
 
 export function createInitialState(nowIso = new Date().toISOString()): MonitorAppState {
   return {
     cinemas: DEFAULT_CINEMAS.map((c) => ({ ...c })),
-    movies: DEFAULT_MOVIES.map((m) => ({ ...m, seenShowKeys: [...m.seenShowKeys], targetFormats: [...m.targetFormats] })),
-    alertRounds: DEFAULT_ALERT_ROUNDS.map((r) => ({ ...r })),
+    movies: DEFAULT_MOVIES.map((m) => ({
+      ...m,
+      seenShowKeys: [...m.seenShowKeys],
+      targetFormats: [...m.targetFormats],
+    })),
+    alertRounds: [],
     riskConfig: {
       baseIntervalSec: 60,
       jitterSec: 12,
@@ -158,6 +118,7 @@ export function createInitialState(nowIso = new Date().toISOString()): MonitorAp
       cooldownBaseMin: 15,
       probeMode: 'auto',
       maoyanCookie: '',
+      maoyanProxyUrl: '',
       userAgentPoolEnabled: true,
       autoCircuitBreaker: true,
     },
@@ -232,12 +193,6 @@ export function matchesTargetFormat(targetFormats: string[], slot: ShowtimeSlot)
   });
 }
 
-/**
- * Pure multi-round opening detection engine.
- * Rule: For every starred movie that has NOT been manually stopped (`isStarred && !manuallyStopped`),
- * any unseen showtime slots trigger a brand new AlertRound (Round 1, Round 2, Round 3...)
- * and NEVER auto-stop monitoring.
- */
 export function detectNewOpeningRounds(
   state: MonitorAppState,
   snapshots: CinemaProbeSnapshot[],
@@ -296,7 +251,6 @@ export function detectNewOpeningRounds(
       deliveryResults: [],
     });
 
-    // Crucial: keep isStarred=true and manuallyStopped=false so subsequent rounds keep alerting!
     return {
       ...movie,
       alertRoundsCount: roundNumber,
@@ -308,11 +262,6 @@ export function detectNewOpeningRounds(
   return { nextMovies, newRounds };
 }
 
-/**
- * Computes safe next polling delay in milliseconds with symmetric random jitter.
- * Never returns less than 30,000ms to protect against aggressive burst polling.
- * When circuit breaker is open, returns remaining cooldown duration.
- */
 export function computeNextIntervalMs(
   config: RiskControlConfig,
   riskState: RiskControlState,
@@ -332,16 +281,14 @@ export function computeNextIntervalMs(
   return Math.max(30_000, Math.round(baseMs + offset));
 }
 
-const RISK_PATTERNS = [
+const STRICT_RISK_PATTERNS = [
   'verify.maoyan.com',
   'yoda',
-  'captcha',
   '滑块',
   '安全验证',
   '访问过于频繁',
   '请求过于频繁',
   'antispider',
-  'forbidden',
 ];
 
 export function evaluateRiskResponse(
@@ -355,8 +302,14 @@ export function evaluateRiskResponse(
   reason: string | null;
   nextRiskState: RiskControlState;
 } {
+  const trimmed = bodyText.trim();
+  const isValidMaoyanJson =
+    statusCode === 200 && trimmed.startsWith('{') && trimmed.includes('"showData"');
   const lowerBody = bodyText.toLowerCase();
-  const matchedKeyword = RISK_PATTERNS.find((kw) => lowerBody.includes(kw.toLowerCase()));
+  const matchedKeyword = isValidMaoyanJson
+    ? undefined
+    : STRICT_RISK_PATTERNS.find((kw) => lowerBody.includes(kw.toLowerCase())) ||
+      (statusCode >= 400 && lowerBody.includes('forbidden') ? 'forbidden' : undefined);
   const isRateOrAuthBlock = statusCode === 403 || statusCode === 429 || statusCode === 418;
 
   if (isRateOrAuthBlock || matchedKeyword) {
@@ -398,50 +351,50 @@ export function evaluateRiskResponse(
   };
 }
 
-export function generateGitHubWorkflowFiles(state: MonitorAppState): GitHubWorkflowBundle {
+export function generateGitHubWorkflowFiles(
+  state: MonitorAppState,
+  options?: { runnerType?: 'ubuntu-latest' | 'self-hosted' }
+): GitHubWorkflowBundle {
+  const runnerType = options?.runnerType || 'ubuntu-latest';
   const activeCinemas = state.cinemas.filter((c) => c.enabled);
   const starredMovies = state.movies.filter((m) => m.isStarred && !m.manuallyStopped);
 
-  const cinemaConfigJson = JSON.stringify(
-    activeCinemas.map((c) => ({
+  const watchlistPayload = {
+    cinemas: activeCinemas.map((c) => ({
       id: c.id,
       name: c.shortName,
       maoyanCinemaId: c.maoyanCinemaId,
     })),
-    null,
-    2
-  );
-
-  const watchlistJson = JSON.stringify(
-    starredMovies.map((m) => ({
+    watchlist: starredMovies.map((m) => ({
       title: m.title,
       targetFormats: m.targetFormats,
       manuallyStopped: m.manuallyStopped,
     })),
-    null,
-    2
-  );
+  };
 
-  const workflowYaml = `name: 东莞IMAX开票雷达 (每分钟探测与多轮提醒)
+  const watchlistJson = JSON.stringify(watchlistPayload, null, 2);
+
+  const workflowYaml = `name: 东莞IMAX开票雷达 (零Secret免Cookie直连版)
 
 on:
   schedule:
-    # GitHub Actions 官方 cron 最短 5 分钟一次；
-    # 如需单次 job 内按每 ${state.riskConfig.baseIntervalSec}s±${state.riskConfig.jitterSec}s 连续巡检，请启用下方 LOOP_ROUNDS=4
+    # GitHub Actions 定时任务（单次 job 内可按约每分钟连续巡检 4 轮）
     - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       loop_rounds:
-        description: '单次任务连续探测轮次 (1=单次, 4=连续约4分钟)'
+        description: '单次任务连续探测轮次 (1=单次, 4=每分钟连跑约4分钟)'
         required: false
         default: '4'
 
+# 只需在仓库 Settings -> Actions -> General -> Workflow permissions 开启 Read and write permissions
 permissions:
-  contents: read
+  contents: write
+  issues: write
 
 jobs:
   monitor-dongguan-imax:
-    runs-on: ubuntu-latest
+    runs-on: ${runnerType}
     timeout-minutes: 6
     steps:
       - name: 检出仓库代码
@@ -452,38 +405,51 @@ jobs:
         with:
           node-version: '22'
 
-      - name: 恢复多轮已提醒场次状态缓存
-        uses: actions/cache@v4
-        with:
-          path: .monitor-cache/seen-shows.json
-          key: dongguan-imax-seen-\${{ github.run_id }}
-          restore-keys: |
-            dongguan-imax-seen-
-
-      - name: 执行东莞三家影院开票探测 (带猫眼风控熔断保护)
+      - name: 执行东莞三家影院猫眼开票探测 (零Cookie直连 + 自动开Issue提醒)
         env:
+          GITHUB_TOKEN: \${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: \${{ github.repository }}
+          # 以下第三方推送与Cookie均为可选，不填也能通过 GitHub Issue + 仓库状态文件直接提醒
           PUSHPLUS_TOKEN: \${{ secrets.PUSHPLUS_TOKEN }}
-          SERVERCHAN_KEY: \${{ secrets.SERVERCHAN_KEY }}
-          BARK_URL: \${{ secrets.BARK_URL }}
           WECOM_WEBHOOK: \${{ secrets.WECOM_WEBHOOK }}
           FEISHU_WEBHOOK: \${{ secrets.FEISHU_WEBHOOK }}
+          BARK_URL: \${{ secrets.BARK_URL }}
           MAOYAN_COOKIE: \${{ secrets.MAOYAN_COOKIE }}
           BASE_INTERVAL_SEC: '${state.riskConfig.baseIntervalSec}'
           JITTER_SEC: '${state.riskConfig.jitterSec}'
           LOOP_ROUNDS: \${{ github.event.inputs.loop_rounds || '4' }}
         run: node scripts/monitor-dongguan.mjs
+
+      - name: 提交已提醒轮次缓存到仓库（免外部数据库）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain .monitor-cache)" ]; then
+            git add .monitor-cache/seen-shows.json
+            git commit -m "chore: update dongguan imax seen rounds [skip ci]"
+            git push
+          fi
 `;
 
   const monitorScriptJs = `/**
- * 东莞三家IMAX影院猫眼开票监控脚本 (GitHub Actions 专用)
- * 星标电影每一轮新增场次都会推送提醒，直到在配置中手动移除或设为 manuallyStopped: true
+ * 东莞三家IMAX影院猫眼开票监控脚本 (GitHub Actions 免Cookie直连版)
+ * 只需开启 GitHub Repository Settings -> Actions -> Workflow permissions (Read and write)
+ * 星标电影每一轮新增场次都会自动发 GitHub Issue 提醒（可联动手机通知），直到手动停止
  */
 import fs from 'node:fs';
 import path from 'node:path';
 
-const CINEMAS = ${cinemaConfigJson};
+const DEFAULT_CONFIG = ${watchlistJson};
 
-const WATCHLIST = ${watchlistJson};
+function loadConfig() {
+  const cfgPath = path.resolve('config/watchlist.json');
+  try {
+    if (fs.existsSync(cfgPath)) {
+      return JSON.parse(fs.readFileSync(cfgPath, 'utf8'));
+    }
+  } catch {}
+  return DEFAULT_CONFIG;
+}
 
 const CACHE_FILE = path.resolve('.monitor-cache/seen-shows.json');
 const BASE_INTERVAL_SEC = Math.max(45, Number(process.env.BASE_INTERVAL_SEC || 60));
@@ -513,6 +479,10 @@ function saveCache(cache) {
 }
 
 function isRiskBlocked(status, text) {
+  const trimmed = text.trim();
+  if (status === 200 && trimmed.startsWith('{') && trimmed.includes('"showData"')) {
+    return false;
+  }
   const lower = text.toLowerCase();
   return (
     status === 403 ||
@@ -547,6 +517,7 @@ async function fetchCinemaShows(cinema) {
   for (const m of movies) {
     for (const s of m.shows || []) {
       for (const p of s.plist || []) {
+        const rawPrice = Number(p.vipPrice || p.baseSellPrice);
         slots.push({
           key: \`\${cinema.id}|\${s.showDate}|\${p.tm}|\${p.th}|\${p.tp || ''}\`,
           cinemaName: cinema.name,
@@ -555,7 +526,7 @@ async function fetchCinemaShows(cinema) {
           showTime: p.tm,
           hallName: p.th,
           format: p.tp || '普通/待确认',
-          price: p.vipPrice || p.baseSellPrice || '',
+          price: Number.isFinite(rawPrice) && rawPrice > 0 ? rawPrice : undefined,
         });
       }
     }
@@ -563,8 +534,28 @@ async function fetchCinemaShows(cinema) {
   return slots;
 }
 
+async function createGitHubIssueAlert(title, body) {
+  const token = process.env.GITHUB_TOKEN;
+  const repo = process.env.GITHUB_REPOSITORY;
+  if (!token || !repo) return;
+  try {
+    await fetch(\`https://api.github.com/repos/\${repo}/issues\`, {
+      method: 'POST',
+      headers: {
+        'Authorization': \`Bearer \${token}\`,
+        'Accept': 'application/vnd.github+json',
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ title, body }),
+    });
+  } catch (e) {
+    console.error('GitHub Issue 推送失败:', e.message);
+  }
+}
+
 async function notifyAll(title, content) {
-  const tasks = [];
+  const tasks = [createGitHubIssueAlert(title, content)];
+
   if (process.env.PUSHPLUS_TOKEN) {
     tasks.push(
       fetch('https://www.pushplus.plus/send', {
@@ -599,7 +590,7 @@ async function notifyAll(title, content) {
   await Promise.allSettled(tasks);
 }
 
-async function runOnce(cache) {
+async function runOnce(cache, config) {
   if (cache.blockedUntil && Date.now() < cache.blockedUntil) {
     console.log('风控熔断冷却中，跳过本次探测');
     return;
@@ -607,11 +598,11 @@ async function runOnce(cache) {
   const seen = new Set(cache.seenKeys || []);
   const allSlots = [];
 
-  for (const cinema of CINEMAS) {
+  for (const cinema of config.cinemas) {
     try {
       const slots = await fetchCinemaShows(cinema);
       allSlots.push(...slots);
-      await sleep(2500 + Math.random() * 2000); // 影院间串行间隔，防并发风控
+      await sleep(2500 + Math.random() * 2000);
     } catch (err) {
       if (String(err.message).startsWith('RISK_BLOCKED')) {
         cache.blockedUntil = Date.now() + 30 * 60 * 1000;
@@ -623,7 +614,7 @@ async function runOnce(cache) {
     }
   }
 
-  for (const watch of WATCHLIST) {
+  for (const watch of config.watchlist) {
     if (watch.manuallyStopped) continue;
     const matched = allSlots.filter((slot) => {
       const titleHit = slot.movieTitle.includes(watch.title) || watch.title.includes(slot.movieTitle);
@@ -637,8 +628,8 @@ async function runOnce(cache) {
       fresh.forEach((s) => seen.add(s.key));
       const round = (cache.roundByMovie[watch.title] || 0) + 1;
       cache.roundByMovie[watch.title] = round;
-      const lines = fresh.slice(0, 12).map((s) => \`- \${s.cinemaName} | \${s.showDate} \${s.showTime} | \${s.hallName} (\${s.format})\`).join('\\n');
-      await notifyAll(\`[第\${round}轮开票] \${watch.title}\`, \`检测到 \${fresh.length} 个新开场次：\\n\${lines}\\n\\n*本片仍处于持续盯票状态，后续新加场次将继续提醒。*\`);
+      const lines = fresh.slice(0, 15).map((s) => \`- **\${s.cinemaName}** | \${s.showDate} \${s.showTime} | \${s.hallName} (\${s.format})\${s.price ? \` ¥\${s.price}\` : ''}\`).join('\\n');
+      await notifyAll(\`[第\${round}轮开票] \${watch.title}\`, \`检测到 \${fresh.length} 个新开场次：\\n\${lines}\\n\\n> 本片仍处于持续盯票状态，后续新加场次将继续提醒。\`);
     }
   }
 
@@ -647,9 +638,10 @@ async function runOnce(cache) {
 }
 
 async function main() {
+  const config = loadConfig();
   const cache = loadCache();
   for (let i = 0; i < LOOP_ROUNDS; i++) {
-    await runOnce(cache);
+    await runOnce(cache, config);
     if (i < LOOP_ROUNDS - 1) {
       const jitter = (Math.random() * 2 - 1) * JITTER_SEC * 1000;
       const waitMs = Math.max(35000, BASE_INTERVAL_SEC * 1000 + jitter);
@@ -661,35 +653,29 @@ async function main() {
 main();
 `;
 
-  const readmeMd = `# 东莞IMAX开票雷达 (GitHub Actions + 华为手机适配指南)
+  const readmeMd = `# 东莞IMAX开票雷达 (GitHub Actions 免Cookie零Secret开箱即用版)
 
-## 1. 监控范围（东莞三家核心影院）
+## 1. 只需开启 1 个 GitHub Action 权限即可开跑
+不需要手动配置 Cookie、不需要买服务器、也不强制填写第三方 Token：
+1. 将本代码推送到你的 GitHub 仓库。
+2. 打开仓库 **Settings → Actions → General → Workflow permissions**。
+3. 选中 **Read and write permissions**，点击 **Save**。
+4. 前往 **Actions** 标签页启用工作流即可！每当检测到星标电影新开票，GitHub Actions 会自动：
+   - 直接请求猫眼公开影院排片接口抓取东莞三家影院；
+   - 自动在仓库内创建一个 **GitHub Issue**（配合手机 GitHub App 或邮件提醒即可在华为手机收到弹窗）；
+   - 自动把已提醒的场次提交到 \`.monitor-cache/seen-shows.json\`，确保每一轮加场都不重报、不漏报。
+
+## 2. 东莞三家核心影院（已核实猫眼真实 Cinema ID）
 ${activeCinemas.map((c) => `- **${c.shortName}** (${c.district}) · 猫眼ID: \`${c.maoyanCinemaId}\``).join('\n')}
 
-## 2. 星标多轮提醒原则
-- 星标电影（\`isStarred: true\`）只要在三家影院检测到**未曾提醒过的新场次**（如首映开票、次日加场、IMAX GT补场），就会立即触发新一轮提醒（第1轮、第2轮、第3轮...）。
-- **不会自动停止**：除非您手动将其停止，否则每一轮新开票都会继续推送。
-
-## 3. 猫眼风控防护策略
-- **随机抖动探测**：默认基础周期 \`${state.riskConfig.baseIntervalSec}s ± ${state.riskConfig.jitterSec}s\`，避免整点机械请求。
-- **串行影院间隔**：三家影院之间保留 \`${(state.riskConfig.interCinemaDelayMs / 1000).toFixed(1)}s\` 以上停顿。
-- **熔断器保护**：遇到 HTTP 403/429 或 \`verify.maoyan.com\` 滑块验证特征时，立即中止探测并冷却，不强行高频重试。
-
-## 4. GitHub Secrets 配置（推荐搭配华为手机使用）
-在仓库 **Settings -> Secrets and variables -> Actions** 中添加：
-- \`PUSHPLUS_TOKEN\`: 强烈推荐华为手机用户使用（支持微信服务号/企业微信毫秒级推送，不依赖浏览器后台常驻）。
-- \`WECOM_WEBHOOK\` / \`FEISHU_WEBHOOK\`: 企业微信或飞书群机器人通知，华为鸿蒙系统可直接在应用启动管理设为允许后台运行。
-- \`MAOYAN_COOKIE\`: （可选）在手机浏览器打开猫眼H5后复制的合法Cookie，可显著降低匿名风控概率。
-
-## 5. 华为手机 PWA 安装与防杀后台
-1. 使用**华为浏览器**打开本 Web App 线上地址。
-2. 点击底部菜单 **“工具箱 / 更多” -> “添加到桌面”**，即可获得独立全屏图标。
-3. 如需开启网页前景实时雷达：进入手机 **设置 -> 应用和服务 -> 应用启动管理**，找到华为浏览器或飞书/微信，改为**手动管理**并开启“允许自启动、允许后台活动”。
+## 3. 可选进阶：华为手机微信秒级提醒
+如果你希望通过微信直接收通知，只需在 **Settings → Secrets and variables → Actions** 中额外添加一个 \`PUSHPLUS_TOKEN\`（或 \`WECOM_WEBHOOK\` / \`FEISHU_WEBHOOK\`），脚本会自动双通道推送。
 `;
 
   return {
     workflowYaml,
     monitorScriptJs,
+    watchlistJson,
     readmeMd,
   };
 }

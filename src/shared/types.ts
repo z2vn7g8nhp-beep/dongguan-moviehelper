@@ -75,6 +75,7 @@ export interface RiskControlConfig {
   cooldownBaseMin: number; // default 15
   probeMode: ProbeMode;
   maoyanCookie: string;
+  maoyanProxyUrl: string;
   userAgentPoolEnabled: boolean;
   autoCircuitBreaker: boolean;
 }
@@ -116,5 +117,6 @@ export interface MonitorAppState {
 export interface GitHubWorkflowBundle {
   workflowYaml: string;
   monitorScriptJs: string;
+  watchlistJson: string;
   readmeMd: string;
 }

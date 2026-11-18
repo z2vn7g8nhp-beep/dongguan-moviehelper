@@ -1,19 +1,20 @@
-name: 东莞IMAX开票雷达 (每分钟探测与多轮提醒)
+name: 东莞IMAX开票雷达 (零Secret免Cookie直连版)
 
 on:
   schedule:
-    # GitHub Actions 官方 cron 最短 5 分钟一次；
-    # 如需单次 job 内按每 60s±12s 连续巡检，请启用下方 LOOP_ROUNDS=4
+    # GitHub Actions 定时任务（单次 job 内可按约每分钟连续巡检 4 轮）
     - cron: '*/5 * * * *'
   workflow_dispatch:
     inputs:
       loop_rounds:
-        description: '单次任务连续探测轮次 (1=单次, 4=连续约4分钟)'
+        description: '单次任务连续探测轮次 (1=单次, 4=每分钟连跑约4分钟)'
         required: false
         default: '4'
 
+# 只需在仓库 Settings -> Actions -> General -> Workflow permissions 开启 Read and write permissions
 permissions:
-  contents: read
+  contents: write
+  issues: write
 
 jobs:
   monitor-dongguan-imax:
@@ -28,23 +29,27 @@ jobs:
         with:
           node-version: '22'
 
-      - name: 恢复多轮已提醒场次状态缓存
-        uses: actions/cache@v4
-        with:
-          path: .monitor-cache/seen-shows.json
-          key: dongguan-imax-seen-${{ github.run_id }}
-          restore-keys: |
-            dongguan-imax-seen-
-
-      - name: 执行东莞三家影院开票探测 (带猫眼风控熔断保护)
+      - name: 执行东莞三家影院猫眼开票探测 (零Cookie直连 + 自动开Issue提醒)
         env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          GITHUB_REPOSITORY: ${{ github.repository }}
+          # 以下第三方推送与Cookie均为可选，不填也能通过 GitHub Issue + 仓库状态文件直接提醒
           PUSHPLUS_TOKEN: ${{ secrets.PUSHPLUS_TOKEN }}
-          SERVERCHAN_KEY: ${{ secrets.SERVERCHAN_KEY }}
-          BARK_URL: ${{ secrets.BARK_URL }}
           WECOM_WEBHOOK: ${{ secrets.WECOM_WEBHOOK }}
           FEISHU_WEBHOOK: ${{ secrets.FEISHU_WEBHOOK }}
+          BARK_URL: ${{ secrets.BARK_URL }}
           MAOYAN_COOKIE: ${{ secrets.MAOYAN_COOKIE }}
           BASE_INTERVAL_SEC: '60'
           JITTER_SEC: '12'
           LOOP_ROUNDS: ${{ github.event.inputs.loop_rounds || '4' }}
         run: node scripts/monitor-dongguan.mjs
+
+      - name: 提交已提醒轮次缓存到仓库（免外部数据库）
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          if [ -n "$(git status --porcelain .monitor-cache)" ]; then
+            git add .monitor-cache/seen-shows.json
+            git commit -m "chore: update dongguan imax seen rounds [skip ci]"
+            git push
+          fi

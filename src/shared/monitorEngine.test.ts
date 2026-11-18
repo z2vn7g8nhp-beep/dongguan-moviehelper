@@ -134,8 +134,14 @@ test('risk-control circuit breaker trips on 403 or verify redirect and respects 
   const cooldownWait = computeNextIntervalMs(state.riskConfig, blocked.nextRiskState, now + 60_000);
   assert.ok(cooldownWait >= 14 * 60_000);
 
-  // Valid 200 resets circuit breaker
-  const recovered = evaluateRiskResponse(200, '{"showData":{"movies":[]}}', blocked.nextRiskState, state.riskConfig, now + 900_000);
+  // Valid 200 JSON resets circuit breaker even if movie text contains 'forbidden'
+  const recovered = evaluateRiskResponse(
+    200,
+    '{"showData":{"movies":[{"nm":"The Forbidden Kingdom"}]}}',
+    blocked.nextRiskState,
+    state.riskConfig,
+    now + 900_000
+  );
   assert.equal(recovered.blocked, false);
   assert.equal(recovered.nextRiskState.circuitState, 'closed');
   assert.equal(recovered.nextRiskState.consecutiveBlocks, 0);
@@ -150,13 +156,17 @@ test('risk-control circuit breaker trips on 403 or verify redirect and respects 
   assert.equal(minJitterDelay, 30_000);
 });
 
-test('GitHub workflow generator includes all 3 Dongguan cinemas and starred movies', () => {
+test('GitHub workflow generator includes all 3 verified Dongguan cinemas and zero-secret write permissions', () => {
   const state = createInitialState();
   const bundle = generateGitHubWorkflowFiles(state);
-  assert.match(bundle.monitorScriptJs, /15648/);
-  assert.match(bundle.monitorScriptJs, /11092/);
-  assert.match(bundle.monitorScriptJs, /26341/);
-  assert.match(bundle.monitorScriptJs, /沙丘3：救世主/);
-  assert.match(bundle.workflowYaml, /PUSHPLUS_TOKEN/);
-  assert.match(bundle.readmeMd, /华为浏览器/);
+  assert.match(bundle.watchlistJson, /1485/);
+  assert.match(bundle.watchlistJson, /10418/);
+  assert.match(bundle.watchlistJson, /26100/);
+  assert.match(bundle.watchlistJson, /奥德赛/);
+  assert.match(bundle.workflowYaml, /contents: write/);
+  assert.match(bundle.workflowYaml, /issues: write/);
+  assert.match(bundle.monitorScriptJs, /createGitHubIssueAlert/);
+
+  const selfHosted = generateGitHubWorkflowFiles(state, { runnerType: 'self-hosted' });
+  assert.match(selfHosted.workflowYaml, /runs-on: self-hosted/);
 });

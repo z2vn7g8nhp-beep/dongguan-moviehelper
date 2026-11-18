@@ -37,12 +37,54 @@ const POSTER_FALLBACKS = [
   '/src/assets/images/poster_stellar_horizon_1794981941611.jpg',
 ];
 
+const LEGACY_CINEMA_ID_MAP: Record<string, string> = {
+  'dongguan-huanan-mall-wanda': '1485',
+  'dongguan-dongcheng-wanda': '10418',
+  'dongguan-minying-guomao-cgv': '26100',
+};
+
+function syncRepoExportFiles(state: MonitorAppState): void {
+  try {
+    const bundle = generateGitHubWorkflowFiles(state);
+    fs.mkdirSync(path.resolve(process.cwd(), 'config'), { recursive: true });
+    fs.mkdirSync(path.resolve(process.cwd(), '.github/workflows'), { recursive: true });
+    fs.mkdirSync(path.resolve(process.cwd(), 'scripts'), { recursive: true });
+    fs.writeFileSync(path.resolve(process.cwd(), 'config/watchlist.json'), bundle.watchlistJson, 'utf8');
+    fs.writeFileSync(path.resolve(process.cwd(), '.github/workflows/ticket-monitor.yml'), bundle.workflowYaml, 'utf8');
+    fs.writeFileSync(path.resolve(process.cwd(), 'scripts/monitor-dongguan.mjs'), bundle.monitorScriptJs, 'utf8');
+  } catch {
+    // Non-fatal in read-only environments
+  }
+}
+
 function loadPersistedState(): MonitorAppState {
   try {
     if (fs.existsSync(STATE_FILE)) {
       const raw = fs.readFileSync(STATE_FILE, 'utf8');
       const parsed = JSON.parse(raw) as MonitorAppState;
       if (parsed && Array.isArray(parsed.cinemas) && Array.isArray(parsed.movies)) {
+        // Auto-migrate placeholder cinema IDs to verified real Dongguan Maoyan IDs
+        parsed.cinemas = parsed.cinemas.map((c) => {
+          if (
+            (c.id === 'dongguan-huanan-mall-wanda' && c.maoyanCinemaId === '15648') ||
+            (c.id === 'dongguan-dongcheng-wanda' && c.maoyanCinemaId === '11092') ||
+            (c.id === 'dongguan-minying-guomao-cgv' && c.maoyanCinemaId === '26341')
+          ) {
+            return { ...c, maoyanCinemaId: LEGACY_CINEMA_ID_MAP[c.id] || c.maoyanCinemaId };
+          }
+          return c;
+        });
+        parsed.riskConfig = {
+          ...createInitialState().riskConfig,
+          ...parsed.riskConfig,
+          maoyanCookie: parsed.riskConfig?.maoyanCookie || process.env.MAOYAN_COOKIE || '',
+          maoyanProxyUrl: parsed.riskConfig?.maoyanProxyUrl || process.env.MAOYAN_PROXY_URL || '',
+        };
+        parsed.pushConfig = {
+          ...createInitialState().pushConfig,
+          ...parsed.pushConfig,
+          pushPlusToken: parsed.pushConfig?.pushPlusToken || process.env.PUSHPLUS_TOKEN || '',
+        };
         return parsed;
       }
     }
@@ -59,6 +101,7 @@ function savePersistedState(state: MonitorAppState): void {
     fs.mkdirSync(DATA_DIR, { recursive: true });
     state.updatedAt = new Date().toISOString();
     fs.writeFileSync(STATE_FILE, JSON.stringify(state, null, 2), 'utf8');
+    syncRepoExportFiles(state);
   } catch (err) {
     console.error('Failed to persist monitor-state.json:', err);
   }
@@ -429,6 +472,7 @@ async function probeSingleCinema(
       for (const day of m.shows || []) {
         const showDate = day.showDate || '';
         for (const p of day.plist || []) {
+          const parsedPrice = Number(p.vipPrice || p.baseSellPrice);
           shows.push({
             cinemaId: cinema.id,
             cinemaName: cinema.shortName,
@@ -438,7 +482,7 @@ async function probeSingleCinema(
             hallName: p.th || '常规影厅',
             format: p.tp || (p.th?.includes('IMAX') ? 'IMAX' : '常规'),
             language: p.lang || '原版',
-            priceYuan: Number(p.vipPrice || p.baseSellPrice || 0) || undefined,
+            priceYuan: Number.isFinite(parsedPrice) && parsedPrice > 0 ? parsedPrice : undefined,
             seqNo: p.seqNo,
           });
         }
@@ -948,8 +992,55 @@ async function startServer() {
     res.json({ reason: evalResult.reason, state: appState });
   });
 
-  app.get('/api/github/export', (_req, res) => {
-    res.json(generateGitHubWorkflowFiles(appState));
+  app.get('/api/maoyan/now-playing', async (_req, res) => {
+    try {
+      const huanan = appState.cinemas[0];
+      const r = await fetch(
+        `https://m.maoyan.com/ajax/cinemaDetail?cinemaId=${encodeURIComponent(huanan.maoyanCinemaId)}`,
+        {
+          headers: {
+            'User-Agent': MOBILE_USER_AGENTS[0],
+            Referer: `https://m.maoyan.com/shows/${huanan.maoyanCinemaId}`,
+          },
+          signal: AbortSignal.timeout(8000),
+        }
+      );
+      const data = (await r.json()) as {
+        showData?: {
+          cinemaName?: string;
+          movies?: Array<{
+            id?: number;
+            nm?: string;
+            sc?: string;
+            shows?: Array<{ showDate?: string; plist?: Array<{ tp?: string; th?: string }> }>;
+          }>;
+        };
+      };
+      const list = (data?.showData?.movies || []).map((m) => {
+        const formats = Array.from(
+          new Set(
+            (m.shows || []).flatMap((s) =>
+              (s.plist || []).map((p) => (p.th?.includes('IMAX GT') ? 'IMAX GT' : p.tp || '2D'))
+            )
+          )
+        ).slice(0, 4);
+        return {
+          id: String(m.id || ''),
+          title: m.nm || '',
+          score: m.sc || '',
+          dates: (m.shows || []).map((s) => s.showDate || '').filter(Boolean),
+          formats,
+        };
+      });
+      res.json({ ok: true, cinemaName: data?.showData?.cinemaName || huanan.name, movies: list });
+    } catch (err) {
+      res.json({ ok: false, movies: [], error: String((err as Error)?.message || err) });
+    }
+  });
+
+  app.get('/api/github/export', (req, res) => {
+    const runnerType = req.query.runner === 'self-hosted' ? 'self-hosted' : 'ubuntu-latest';
+    res.json(generateGitHubWorkflowFiles(appState, { runnerType }));
   });
 
   if (process.env.NODE_ENV !== 'production') {

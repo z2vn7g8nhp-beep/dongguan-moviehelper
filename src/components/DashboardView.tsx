@@ -67,6 +67,17 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
   const [editingCinemaId, setEditingCinemaId] = useState<string | null>(null);
   const [editingMaoyanId, setEditingMaoyanId] = useState('');
   const [brokenPosters, setBrokenPosters] = useState<Record<string, boolean>>({});
+  const [nowPlaying, setNowPlaying] = useState<{ id: string; title: string; formats: string[] }[]>([]);
+
+  useEffect(() => {
+    if (!showAddForm || nowPlaying.length > 0) return;
+    fetch('/api/maoyan/now-playing')
+      .then((r) => r.json())
+      .then((d) => {
+        if (Array.isArray(d.movies)) setNowPlaying(d.movies.slice(0, 8));
+      })
+      .catch(() => {});
+  }, [showAddForm, nowPlaying.length]);
 
   useEffect(() => {
     const updateCountdown = () => {
@@ -407,6 +418,26 @@ export const DashboardView: React.FC<DashboardViewProps> = ({
             onSubmit={handleCreateMovie}
             className="rounded-2xl border border-slate-200 bg-white p-5 dark:border-slate-800 dark:bg-slate-900"
           >
+            {nowPlaying.length > 0 && (
+              <div className="mb-4">
+                <p className="text-xs font-semibold text-slate-600 dark:text-slate-400">
+                  华南MALL万达实时排片快选（点击自动填入）：
+                </p>
+                <div className="mt-2 flex flex-wrap gap-2">
+                  {nowPlaying.map((m) => (
+                    <button
+                      key={m.id || m.title}
+                      type="button"
+                      onClick={() => setNewTitle(m.title)}
+                      className="min-h-[34px] rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-medium text-slate-800 hover:border-rose-300 hover:bg-rose-50 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200 dark:hover:border-rose-700"
+                    >
+                      {m.title}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            )}
+
             <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
               <div>
                 <label htmlFor="movie-title-input" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">

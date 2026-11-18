@@ -1,0 +1,36 @@
+{
+  "cinemas": [
+    {
+      "id": "dongguan-huanan-mall-wanda",
+      "name": "华南MALL万达 IMAX GT",
+      "maoyanCinemaId": "1485"
+    },
+    {
+      "id": "dongguan-dongcheng-wanda",
+      "name": "东城万达 IMAX",
+      "maoyanCinemaId": "10418"
+    },
+    {
+      "id": "dongguan-minying-guomao-cgv",
+      "name": "民盈国贸城 CGV",
+      "maoyanCinemaId": "26100"
+    }
+  ],
+  "watchlist": [
+    {
+      "title": "奥德赛",
+      "targetFormats": [
+        "IMAX GT",
+        "IMAX"
+      ],
+      "manuallyStopped": false
+    },
+    {
+      "title": "哪吒之沧海龙吟",
+      "targetFormats": [
+        "全制式"
+      ],
+      "manuallyStopped": false
+    }
+  ]
+}

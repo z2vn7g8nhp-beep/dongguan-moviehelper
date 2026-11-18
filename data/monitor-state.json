@@ -2,64 +2,64 @@
   "cinemas": [
     {
       "id": "dongguan-huanan-mall-wanda",
-      "name": "万达影城（华南MALL IMAX GT店）",
+      "name": "万达影城（华南MALL-IMAXGT激光店）",
       "shortName": "华南MALL万达 IMAX GT",
-      "district": "东莞万江 · 华南MALL",
+      "district": "东莞万江 · 华南MALL D区3层",
       "brand": "万达影城",
       "featuredFormats": [
         "IMAX GT 激光",
         "4DX",
         "VIP厅"
       ],
-      "maoyanCinemaId": "15648",
+      "maoyanCinemaId": "1485",
       "enabled": true,
-      "lastCheckedAt": "2026-11-18T06:10:50.698Z",
-      "lastStatus": "idle",
-      "lastStatusNote": "已手动解除风控冷却，等待下次探测",
-      "activeShowCount": 0
+      "lastCheckedAt": "2026-11-18T06:26:23.199Z",
+      "lastStatus": "ok",
+      "lastStatusNote": "猫眼直连成功 · 在售排片 76 场",
+      "activeShowCount": 76
     },
     {
       "id": "dongguan-dongcheng-wanda",
       "name": "万达影城（东城万达广场IMAX店）",
       "shortName": "东城万达 IMAX",
-      "district": "东莞东城 · 东城万达广场",
+      "district": "东莞东城 · 东城万达广场4层",
       "brand": "万达影城",
       "featuredFormats": [
         "IMAX 激光",
         "杜比全景声",
         "Prime"
       ],
-      "maoyanCinemaId": "11092",
+      "maoyanCinemaId": "10418",
       "enabled": true,
-      "lastCheckedAt": null,
-      "lastStatus": "idle",
-      "lastStatusNote": "等待首轮探测",
-      "activeShowCount": 0
+      "lastCheckedAt": "2026-11-18T06:26:26.925Z",
+      "lastStatus": "ok",
+      "lastStatusNote": "猫眼直连成功 · 在售排片 88 场",
+      "activeShowCount": 88
     },
     {
       "id": "dongguan-minying-guomao-cgv",
-      "name": "CGV影城（民盈·国贸城IMAX激光店）",
+      "name": "CGV影城（民盈·国贸城店）",
       "shortName": "民盈国贸城 CGV",
-      "district": "东莞南城 · 民盈国贸城",
+      "district": "东莞东城/南城交界 · 民盈国贸城4层",
       "brand": "CGV影城",
       "featuredFormats": [
-        "IMAX 激光",
+        "IMAX",
         "ScreenX",
         "GOLD CLASS"
       ],
-      "maoyanCinemaId": "26341",
+      "maoyanCinemaId": "26100",
       "enabled": true,
-      "lastCheckedAt": "2026-11-18T06:10:25.268Z",
+      "lastCheckedAt": "2026-11-18T06:26:30.851Z",
       "lastStatus": "ok",
-      "lastStatusNote": "捕获第 2 轮新增开票 (2 场)",
-      "activeShowCount": 2
+      "lastStatusNote": "猫眼直连成功 · 在售排片 242 场",
+      "activeShowCount": 242
     }
   ],
   "movies": [
     {
-      "id": "movie-dune-3",
-      "title": "沙丘3：救世主",
-      "maoyanMovieId": "1498201",
+      "id": "movie-odyssey",
+      "title": "奥德赛",
+      "maoyanMovieId": "1545360",
       "posterUrl": "/src/assets/images/poster_dune_odyssey_1794981941105.jpg",
       "targetFormats": [
         "IMAX GT",
@@ -67,16 +67,32 @@
       ],
       "isStarred": true,
       "manuallyStopped": false,
-      "alertRoundsCount": 2,
-      "lastAlertAt": "2026-11-18T06:10:25.268Z",
+      "alertRoundsCount": 1,
+      "lastAlertAt": "2026-11-18T06:26:30.851Z",
       "seenShowKeys": [
-        "dongguan-huanan-mall-wanda|2026-11-20|19:30|1号IMAX GT激光厅|IMAX GT",
-        "dongguan-huanan-mall-wanda|2026-11-20|22:20|1号IMAX GT激光厅|IMAX GT",
-        "dongguan-minying-guomao-cgv|2026-11-23|18:15|CGV IMAX激光厅|IMAX",
-        "dongguan-minying-guomao-cgv|2026-11-23|20:40|CGV IMAX激光厅|IMAX"
+        "dongguan-huanan-mall-wanda|2026-11-18|15:50|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-18|19:05|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-18|22:20|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-19|12:35|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-19|15:50|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-19|19:05|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-19|22:20|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-20|12:35|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-20|15:50|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-20|19:05|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-20|22:20|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-21|13:00|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-21|16:15|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-21|19:30|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-21|22:45|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-22|09:45|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-22|13:00|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-22|16:15|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-22|19:30|IMAX GT厅(激光)-儿童需购票|IMAX2D",
+        "dongguan-huanan-mall-wanda|2026-11-22|22:45|IMAX GT厅(激光)-儿童需购票|IMAX2D"
       ],
       "createdAt": "2026-11-17T18:00:00.000Z",
-      "notes": "优先锁定华南MALL IMAX GT 1.43:1画幅黄金场"
+      "notes": "优先锁定华南MALL IMAX GT 激光厅黄金场"
     },
     {
       "id": "movie-nezha-storm",
@@ -115,54 +131,12 @@
   ],
   "alertRounds": [
     {
-      "id": "round-movie-dune-3-2-1794982225268",
-      "movieId": "movie-dune-3",
-      "movieTitle": "沙丘3：救世主",
-      "roundNumber": 2,
-      "detectedAt": "2026-11-18T06:10:25.268Z",
-      "source": "sandbox_sim",
-      "cinemaNames": [
-        "民盈国贸城 CGV"
-      ],
-      "newShowtimes": [
-        {
-          "cinemaId": "dongguan-minying-guomao-cgv",
-          "cinemaName": "民盈国贸城 CGV",
-          "movieTitle": "沙丘3：救世主",
-          "showDate": "2026-11-23",
-          "showTime": "18:15",
-          "hallName": "CGV IMAX激光厅",
-          "format": "IMAX",
-          "language": "原版 2D",
-          "priceYuan": 85
-        },
-        {
-          "cinemaId": "dongguan-minying-guomao-cgv",
-          "cinemaName": "民盈国贸城 CGV",
-          "movieTitle": "沙丘3：救世主",
-          "showDate": "2026-11-23",
-          "showTime": "20:40",
-          "hallName": "CGV IMAX激光厅",
-          "format": "IMAX",
-          "language": "原版 3D",
-          "priceYuan": 92
-        }
-      ],
-      "deliveryResults": [
-        {
-          "channel": "Web/PWA 本地告警中心",
-          "ok": true,
-          "message": "已写入开票轮次记录并触发前景提醒"
-        }
-      ]
-    },
-    {
-      "id": "round-seed-1",
-      "movieId": "movie-dune-3",
-      "movieTitle": "沙丘3：救世主",
+      "id": "round-movie-odyssey-1-1794983190851",
+      "movieId": "movie-odyssey",
+      "movieTitle": "奥德赛",
       "roundNumber": 1,
-      "detectedAt": "2026-11-17T21:15:00.000Z",
-      "source": "sandbox_sim",
+      "detectedAt": "2026-11-18T06:26:30.851Z",
+      "source": "maoyan_live",
       "cinemaNames": [
         "华南MALL万达 IMAX GT"
       ],
@@ -170,31 +144,249 @@
         {
           "cinemaId": "dongguan-huanan-mall-wanda",
           "cinemaName": "华南MALL万达 IMAX GT",
-          "movieTitle": "沙丘3：救世主",
-          "showDate": "2026-11-20",
-          "showTime": "19:30",
-          "hallName": "1号IMAX GT激光厅",
-          "format": "IMAX GT",
-          "language": "英语 原版2D",
-          "priceYuan": 98
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-18",
+          "showTime": "15:50",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611180018283"
         },
         {
           "cinemaId": "dongguan-huanan-mall-wanda",
           "cinemaName": "华南MALL万达 IMAX GT",
-          "movieTitle": "沙丘3：救世主",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-18",
+          "showTime": "19:05",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611180018284"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-18",
+          "showTime": "22:20",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611180018281"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-19",
+          "showTime": "12:35",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611190013838"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-19",
+          "showTime": "15:50",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611190013837"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-19",
+          "showTime": "19:05",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611190013836"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-19",
+          "showTime": "22:20",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611190013839"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-20",
+          "showTime": "12:35",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611200095588"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-20",
+          "showTime": "15:50",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611200095586"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-20",
+          "showTime": "19:05",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611200095585"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
           "showDate": "2026-11-20",
           "showTime": "22:20",
-          "hallName": "1号IMAX GT激光厅",
-          "format": "IMAX GT",
-          "language": "英语 原版2D",
-          "priceYuan": 89
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611200095587"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-21",
+          "showTime": "13:00",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611210078532"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-21",
+          "showTime": "16:15",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611210078533"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-21",
+          "showTime": "19:30",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611210078534"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-21",
+          "showTime": "22:45",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611210078535"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-22",
+          "showTime": "09:45",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 52.9,
+          "seqNo": "202611220043264"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-22",
+          "showTime": "13:00",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611220043263"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-22",
+          "showTime": "16:15",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611220043262"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-22",
+          "showTime": "19:30",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 67.9,
+          "seqNo": "202611220043261"
+        },
+        {
+          "cinemaId": "dongguan-huanan-mall-wanda",
+          "cinemaName": "华南MALL万达 IMAX GT",
+          "movieTitle": "奥德赛",
+          "showDate": "2026-11-22",
+          "showTime": "22:45",
+          "hallName": "IMAX GT厅(激光)-儿童需购票",
+          "format": "IMAX2D",
+          "language": "英语",
+          "priceYuan": 57.9,
+          "seqNo": "202611220043260"
         }
       ],
       "deliveryResults": [
         {
-          "channel": "浏览器本地告警",
+          "channel": "Web/PWA 本地告警中心",
           "ok": true,
-          "message": "已记录第 1 轮开票事件，持续等待后续加场开票"
+          "message": "已写入开票轮次记录并触发前景提醒"
         }
       ]
     }
@@ -206,6 +398,7 @@
     "cooldownBaseMin": 15,
     "probeMode": "auto",
     "maoyanCookie": "",
+    "maoyanProxyUrl": "",
     "userAgentPoolEnabled": true,
     "autoCircuitBreaker": true
   },
@@ -214,11 +407,11 @@
     "consecutiveBlocks": 0,
     "cooldownUntil": null,
     "lastBlockReason": null,
-    "lastSuccessAt": null,
-    "totalChecks": 2,
-    "totalBlocks": 2,
-    "nextCheckAt": "2026-11-18T06:12:25.281Z",
-    "lastIntervalMs": 56467
+    "lastSuccessAt": "2026-11-18T06:26:30.851Z",
+    "totalChecks": 3,
+    "totalBlocks": 0,
+    "nextCheckAt": "2026-11-18T06:27:37.959Z",
+    "lastIntervalMs": 67104
   },
   "pushConfig": {
     "browserNotificationEnabled": true,
@@ -231,5 +424,5 @@
     "dingtalkWebhook": "",
     "customWebhookUrl": ""
   },
-  "updatedAt": "2026-11-18T06:11:42.550Z"
+  "updatedAt": "2026-11-18T06:26:30.855Z"
 }
