@@ -1,0 +1,6 @@
+{
+  "name": "东莞IMAX开票雷达",
+  "description": "东莞三家核心IMAX影院（华南MALL万达IMAX GT、东城万达IMAX、民盈国贸城CGV）猫眼开票每分钟盯票与多轮持续提醒Web App，适配华为手机PWA与GitHub Actions自动部署。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

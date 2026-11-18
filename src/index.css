@@ -1,0 +1,26 @@
+@import "tailwindcss";
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    font-family: "Plus Jakarta Sans", "Manrope", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+  }
+
+  h1, h2, h3, .font-display {
+    font-family: "Manrope", "PingFang SC", "HarmonyOS Sans SC", "Microsoft YaHei", sans-serif;
+    text-wrap: balance;
+  }
+
+  code, pre, .font-mono {
+    font-family: "JetBrains Mono", ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+.tabular-nums {
+  font-variant-numeric: tabular-nums;
+}
+
+.pb-safe {
+  padding-bottom: env(safe-area-inset-bottom, 0px);
+}
