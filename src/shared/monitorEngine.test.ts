@@ -6,6 +6,7 @@ import {
   detectNewOpeningRounds,
   evaluateRiskResponse,
   generateGitHubWorkflowFiles,
+  matchesMovieTitle,
 } from './monitorEngine';
 import type { CinemaProbeSnapshot } from './types';
 
@@ -156,7 +157,7 @@ test('risk-control circuit breaker trips on 403 or verify redirect and respects 
   assert.equal(minJitterDelay, 30_000);
 });
 
-test('GitHub workflow generator includes all 3 verified Dongguan cinemas and zero-secret write permissions', () => {
+test('GitHub workflow generator includes all 3 verified Dongguan cinemas, concurrency guard, and zero-secret permissions', () => {
   const state = createInitialState();
   const bundle = generateGitHubWorkflowFiles(state);
   assert.match(bundle.watchlistJson, /1485/);
@@ -165,8 +166,19 @@ test('GitHub workflow generator includes all 3 verified Dongguan cinemas and zer
   assert.match(bundle.watchlistJson, /奥德赛/);
   assert.match(bundle.workflowYaml, /contents: write/);
   assert.match(bundle.workflowYaml, /issues: write/);
+  assert.match(bundle.workflowYaml, /group: dongguan-imax-monitor/);
+  assert.match(bundle.workflowYaml, /git pull --rebase/);
   assert.match(bundle.monitorScriptJs, /createGitHubIssueAlert/);
+  assert.match(bundle.monitorScriptJs, /复仇者联盟5/);
 
   const selfHosted = generateGitHubWorkflowFiles(state, { runnerType: 'self-hosted' });
   assert.match(selfHosted.workflowYaml, /runs-on: self-hosted/);
 });
+
+test('matchesMovieTitle expands popular shorthand aliases like 复联5 <-> 复仇者联盟5', () => {
+  assert.equal(matchesMovieTitle('复联5', '复仇者联盟5：毁灭之日'), true);
+  assert.equal(matchesMovieTitle('复仇者联盟5', '复联5'), true);
+  assert.equal(matchesMovieTitle('复联5', 'Avengers: Doomsday'), true);
+  assert.equal(matchesMovieTitle('复联5', '流浪地球3'), false);
+});
+

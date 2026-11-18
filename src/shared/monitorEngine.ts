@@ -57,6 +57,21 @@ export const DEFAULT_CINEMAS: Cinema[] = [
 
 export const DEFAULT_MOVIES: MovieWatchItem[] = [
   {
+    id: 'movie-avengers-5',
+    title: '复仇者联盟5',
+    aliases: ['复联5', '毁灭之日', '毁灭日', 'Avengers: Doomsday'],
+    maoyanMovieId: '',
+    posterUrl: '/src/assets/images/poster_stellar_horizon_1794981941611.jpg',
+    targetFormats: ['IMAX GT', 'IMAX'],
+    isStarred: true,
+    manuallyStopped: false,
+    alertRoundsCount: 0,
+    lastAlertAt: null,
+    seenShowKeys: [],
+    createdAt: '2026-11-17T23:00:00.000Z',
+    notes: '重点蹲华南MALL IMAX GT 激光厅首开与加场（兼容复联5/毁灭之日）',
+  },
+  {
     id: 'movie-odyssey',
     title: '奥德赛',
     maoyanMovieId: '1545360',
@@ -158,16 +173,39 @@ export function buildShowKey(slot: ShowtimeSlot): string {
   ].join('|');
 }
 
-export function matchesMovieTitle(watchTitle: string, candidateTitle: string): boolean {
+const MOVIE_ALIAS_GROUPS: string[][] = [
+  ['复联5', '复仇者联盟5', '复仇者联盟毁灭', '毁灭之日', '毁灭日', 'avengersdoomsday', 'avengers5'],
+  ['复联6', '复仇者联盟6', '秘密战争', 'avengerssecretwars', 'secretwars'],
+  ['沙丘3', '沙丘救世主', 'dune3', 'dunemessiah'],
+];
+
+export function matchesMovieTitle(
+  watchTitle: string,
+  candidateTitle: string,
+  extraAliases: string[] = []
+): boolean {
   const normalize = (s: string) =>
     s
       .toLowerCase()
       .replace(/[\s·：:，,。.!！?？\-—()（）《》【】\[\]]+/g, '')
       .trim();
-  const a = normalize(watchTitle);
-  const b = normalize(candidateTitle);
-  if (!a || !b) return false;
-  return a === b || b.includes(a) || a.includes(b);
+  const cand = normalize(candidateTitle);
+  if (!cand) return false;
+
+  const terms = [watchTitle, ...extraAliases].map(normalize).filter(Boolean);
+  for (const term of terms) {
+    if (cand === term || cand.includes(term) || term.includes(cand)) {
+      return true;
+    }
+    for (const group of MOVIE_ALIAS_GROUPS) {
+      const termInGroup = group.some((g) => term.includes(g) || g.includes(term));
+      const candInGroup = group.some((g) => cand.includes(g) || g.includes(cand));
+      if (termInGroup && candInGroup) {
+        return true;
+      }
+    }
+  }
+  return false;
 }
 
 export function matchesTargetFormat(targetFormats: string[], slot: ShowtimeSlot): boolean {
@@ -218,7 +256,7 @@ export function detectNewOpeningRounds(
     const sourcesUsed = new Set<'maoyan_live' | 'sandbox_sim'>();
 
     for (const item of allShows) {
-      if (!matchesMovieTitle(movie.title, item.show.movieTitle)) continue;
+      if (!matchesMovieTitle(movie.title, item.show.movieTitle, movie.aliases || [])) continue;
       if (!matchesTargetFormat(movie.targetFormats, item.show)) continue;
 
       const key = buildShowKey(item.show);
@@ -367,6 +405,7 @@ export function generateGitHubWorkflowFiles(
     })),
     watchlist: starredMovies.map((m) => ({
       title: m.title,
+      ...(m.aliases && m.aliases.length > 0 ? { aliases: m.aliases } : {}),
       targetFormats: m.targetFormats,
       manuallyStopped: m.manuallyStopped,
     })),
@@ -391,6 +430,11 @@ on:
 permissions:
   contents: write
   issues: write
+
+# 防止 cron-job.org 外部触发与 GitHub 自带 schedule 同时运行导致提交冲突
+concurrency:
+  group: dongguan-imax-monitor
+  cancel-in-progress: false
 
 jobs:
   monitor-dongguan-imax:
@@ -427,6 +471,7 @@ jobs:
           if [ -n "$(git status --porcelain .monitor-cache)" ]; then
             git add .monitor-cache/seen-shows.json
             git commit -m "chore: update dongguan imax seen rounds [skip ci]"
+            git pull --rebase --autostash origin "\${{ github.ref_name }}" || true
             git push
           fi
 `;
@@ -614,11 +659,38 @@ async function runOnce(cache, config) {
     }
   }
 
+  const ALIAS_GROUPS = [
+    ['复联5', '复仇者联盟5', '复仇者联盟毁灭', '毁灭之日', '毁灭日', 'avengersdoomsday', 'avengers5'],
+    ['复联6', '复仇者联盟6', '秘密战争', 'avengerssecretwars', 'secretwars'],
+    ['沙丘3', '沙丘救世主', 'dune3', 'dunemessiah'],
+  ];
+  const normalizeTitle = (s) =>
+    String(s || '')
+      .toLowerCase()
+      .replace(/[\s·：:，,。.!！?？\-—()（）《》【】\[\]]+/g, '')
+      .trim();
+  const isTitleMatch = (watch, candidateTitle) => {
+    const cand = normalizeTitle(candidateTitle);
+    if (!cand) return false;
+    const terms = [watch.title, ...(watch.aliases || [])].map(normalizeTitle).filter(Boolean);
+    for (const term of terms) {
+      if (cand === term || cand.includes(term) || term.includes(cand)) return true;
+      for (const group of ALIAS_GROUPS) {
+        if (
+          group.some((g) => term.includes(g) || g.includes(term)) &&
+          group.some((g) => cand.includes(g) || g.includes(cand))
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   for (const watch of config.watchlist) {
     if (watch.manuallyStopped) continue;
     const matched = allSlots.filter((slot) => {
-      const titleHit = slot.movieTitle.includes(watch.title) || watch.title.includes(slot.movieTitle);
-      if (!titleHit) return false;
+      if (!isTitleMatch(watch, slot.movieTitle)) return false;
       if (watch.targetFormats.includes('全制式')) return true;
       return watch.targetFormats.some((f) => \`\${slot.format} \${slot.hallName}\`.toLowerCase().includes(f.toLowerCase()));
     });

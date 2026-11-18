@@ -1,5 +1,6 @@
 import express from 'express';
 import fs from 'node:fs';
+import http from 'node:http';
 import path from 'node:path';
 import { createServer as createViteServer } from 'vite';
 import {
@@ -85,6 +86,13 @@ function loadPersistedState(): MonitorAppState {
           ...parsed.pushConfig,
           pushPlusToken: parsed.pushConfig?.pushPlusToken || process.env.PUSHPLUS_TOKEN || '',
         };
+        if (!parsed.movies.some((m) => m.id === 'movie-avengers-5' || m.title.includes('复仇者联盟5') || m.title.includes('复联5'))) {
+          const avengersDefault = createInitialState().movies.find((m) => m.id === 'movie-avengers-5');
+          if (avengersDefault) {
+            parsed.movies = [avengersDefault, ...parsed.movies];
+          }
+        }
+        savePersistedState(parsed);
         return parsed;
       }
     }
@@ -1043,9 +1051,16 @@ async function startServer() {
     res.json(generateGitHubWorkflowFiles(appState, { runnerType }));
   });
 
+  const httpServer = http.createServer(app);
+
   if (process.env.NODE_ENV !== 'production') {
+    const disableHmr = process.env.DISABLE_HMR === 'true' || Boolean(process.env.APP_URL);
     const vite = await createViteServer({
-      server: { middlewareMode: true },
+      server: {
+        middlewareMode: true,
+        hmr: disableHmr ? false : { server: httpServer },
+        watch: disableHmr ? null : {},
+      },
       appType: 'spa',
     });
     app.use(vite.middlewares);
@@ -1057,7 +1072,7 @@ async function startServer() {
     });
   }
 
-  app.listen(PORT, '0.0.0.0', () => {
+  httpServer.listen(PORT, '0.0.0.0', () => {
     console.log(`Dongguan IMAX Monitor running at http://0.0.0.0:${PORT}`);
     scheduleNextPoll();
   });

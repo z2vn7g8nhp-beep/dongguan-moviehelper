@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Check, CheckCircle2, Copy, Download, Github, RotateCcw, ShieldAlert, ShieldCheck } from 'lucide-react';
+import { Check, CheckCircle2, Clock, Copy, Download, Github, RotateCcw, ShieldAlert, ShieldCheck } from 'lucide-react';
 import type { GitHubWorkflowBundle, MonitorAppState, RiskControlConfig } from '../shared/types';
 
 interface GitHubDeployViewProps {
@@ -19,6 +19,7 @@ export const GitHubDeployView: React.FC<GitHubDeployViewProps> = ({
   const [runnerType, setRunnerType] = useState<'ubuntu-latest' | 'self-hosted'>('ubuntu-latest');
   const [activeFile, setActiveFile] = useState<'workflow' | 'script' | 'watchlist' | 'readme'>('workflow');
   const [copiedKey, setCopiedKey] = useState<string | null>(null);
+  const [repoSlug, setRepoSlug] = useState('your-name/dongguan-moviehelper');
 
   const [baseIntervalSec, setBaseIntervalSec] = useState(state.riskConfig.baseIntervalSec);
   const [jitterSec, setJitterSec] = useState(state.riskConfig.jitterSec);
@@ -125,6 +126,95 @@ export const GitHubDeployView: React.FC<GitHubDeployViewProps> = ({
                 每当星标电影在东莞三家影院放出新场次，GitHub Actions 会自动在你的仓库创建 <strong>Issue 提醒</strong>（手机登录 GitHub App 或邮件提醒即可收推送），并将已提醒轮次自动提交保存；无需任何 Cookie 或第三方 Token。
               </li>
             </ol>
+          </div>
+        </div>
+      </section>
+
+      {/* cron-job.org Anti-Delay Trigger Card */}
+      <section className="rounded-2xl border border-amber-200 bg-amber-50/60 p-6 dark:border-amber-900/70 dark:bg-amber-950/25">
+        <div className="flex items-start gap-3">
+          <Clock className="mt-0.5 h-5 w-5 shrink-0 text-amber-600 dark:text-amber-400" />
+          <div className="w-full space-y-3">
+            <div>
+              <h2 className="font-display text-base font-bold text-slate-900 dark:text-white">
+                热门大片抢票必配：cron-job.org 准点触发（防止 GitHub 官方 cron 延迟 10~40 分钟）
+              </h2>
+              <p className="mt-1 text-xs leading-relaxed text-slate-700 dark:text-slate-300">
+                GitHub 自带的 <span className="font-mono">schedule: &apos;*/5 * * * *&apos;</span> 经常受排队影响延迟 10~40 分钟甚至跳过触发。蹲《复联5》等热门 IMAX GT 场次时，用免费 <span className="font-mono font-semibold">cron-job.org</span> 每 5 分钟准点触发一次 <span className="font-mono">workflow_dispatch</span>（每次内部自动连跑 4 轮 ≈ 每分钟一探），工作流已内置 <span className="font-mono">concurrency</span> 排队保护不会冲突。
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 gap-3 sm:grid-cols-2">
+              <div>
+                <label htmlFor="cron-repo-slug" className="block text-xs font-semibold text-slate-700 dark:text-slate-300">
+                  输入你的 GitHub 仓库（用户名/仓库名）
+                </label>
+                <input
+                  id="cron-repo-slug"
+                  type="text"
+                  value={repoSlug}
+                  onChange={(e) => setRepoSlug(e.target.value.trim())}
+                  placeholder="例如：username/dongguan-moviehelper"
+                  className="mt-1.5 min-h-[40px] w-full rounded-xl border border-amber-300 bg-white px-3 py-1.5 font-mono text-xs text-slate-900 dark:border-amber-800 dark:bg-slate-900 dark:text-white"
+                />
+              </div>
+              <div className="flex flex-col justify-end text-xs text-slate-600 dark:text-slate-400">
+                <p>触发频率：<strong className="text-slate-900 dark:text-white">每 5 分钟</strong> · 请求方法：<strong className="font-mono text-slate-900 dark:text-white">POST</strong></p>
+                <p className="mt-0.5">需先在 GitHub 头像 → Settings → Developer settings 生成仅含 Actions(Read &amp; write) 权限的 Token</p>
+              </div>
+            </div>
+
+            <div className="space-y-2 rounded-xl border border-amber-200 bg-white/90 p-3.5 text-xs dark:border-amber-900/60 dark:bg-slate-900/80">
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <div className="min-w-0 flex-1">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">1. Request URL：</span>
+                  <code className="break-all font-mono text-slate-900 dark:text-amber-200">
+                    {`https://api.github.com/repos/${repoSlug || 'your-name/dongguan-moviehelper'}/actions/workflows/ticket-monitor.yml/dispatches`}
+                  </code>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText(
+                      `https://api.github.com/repos/${repoSlug || 'your-name/dongguan-moviehelper'}/actions/workflows/ticket-monitor.yml/dispatches`
+                    );
+                    setCopiedKey('cron-url');
+                    setTimeout(() => setCopiedKey(null), 1800);
+                  }}
+                  className="inline-flex min-h-[32px] items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  {copiedKey === 'cron-url' ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                  <span>{copiedKey === 'cron-url' ? '已复制' : '复制 URL'}</span>
+                </button>
+              </div>
+
+              <div className="flex flex-wrap items-center justify-between gap-2 border-t border-slate-100 pt-2 dark:border-slate-800">
+                <div className="min-w-0 flex-1">
+                  <span className="font-semibold text-slate-700 dark:text-slate-300">2. Request Body：</span>
+                  <code className="font-mono text-slate-900 dark:text-amber-200">
+                    {`{"ref":"main","inputs":{"loop_rounds":"4"}}`}
+                  </code>
+                </div>
+                <button
+                  type="button"
+                  onClick={async () => {
+                    await navigator.clipboard.writeText('{"ref":"main","inputs":{"loop_rounds":"4"}}');
+                    setCopiedKey('cron-body');
+                    setTimeout(() => setCopiedKey(null), 1800);
+                  }}
+                  className="inline-flex min-h-[32px] items-center gap-1 rounded-lg border border-slate-200 bg-slate-50 px-2.5 py-1 text-xs font-semibold text-slate-700 hover:bg-slate-100 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-200"
+                >
+                  {copiedKey === 'cron-body' ? <Check className="h-3 w-3 text-emerald-600" /> : <Copy className="h-3 w-3" />}
+                  <span>{copiedKey === 'cron-body' ? '已复制' : '复制 Body'}</span>
+                </button>
+              </div>
+
+              <div className="border-t border-slate-100 pt-2 font-mono text-[11px] leading-relaxed text-slate-600 dark:border-slate-800 dark:text-slate-400">
+                3. Headers 填 3 行：<span className="text-slate-900 dark:text-slate-200">Accept: application/vnd.github+json</span> ·{' '}
+                <span className="text-slate-900 dark:text-slate-200">Content-Type: application/json</span> ·{' '}
+                <span className="text-slate-900 dark:text-slate-200">Authorization: Bearer 你的GitHub_PAT</span>
+              </div>
+            </div>
           </div>
         </div>
       </section>

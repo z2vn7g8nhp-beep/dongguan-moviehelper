@@ -40,6 +40,7 @@ export interface CinemaProbeSnapshot {
 export interface MovieWatchItem {
   id: string;
   title: string;
+  aliases?: string[];
   maoyanMovieId: string;
   posterUrl: string;
   targetFormats: string[]; // e.g. ['IMAX GT', 'IMAX', '杜比/ScreenX'] or ['全制式']
