@@ -26,17 +26,16 @@ const DEFAULT_CONFIG = {
   ],
   "watchlist": [
     {
-      "title": "奥德赛",
+      "title": "复仇者联盟5",
+      "aliases": [
+        "复联5",
+        "毁灭之日",
+        "毁灭日",
+        "Avengers: Doomsday"
+      ],
       "targetFormats": [
         "IMAX GT",
         "IMAX"
-      ],
-      "manuallyStopped": false
-    },
-    {
-      "title": "哪吒之沧海龙吟",
-      "targetFormats": [
-        "全制式"
       ],
       "manuallyStopped": false
     }
@@ -216,11 +215,38 @@ async function runOnce(cache, config) {
     }
   }
 
+  const ALIAS_GROUPS = [
+    ['复联5', '复仇者联盟5', '复仇者联盟毁灭', '毁灭之日', '毁灭日', 'avengersdoomsday', 'avengers5'],
+    ['复联6', '复仇者联盟6', '秘密战争', 'avengerssecretwars', 'secretwars'],
+    ['沙丘3', '沙丘救世主', 'dune3', 'dunemessiah'],
+  ];
+  const normalizeTitle = (s) =>
+    String(s || '')
+      .toLowerCase()
+      .replace(/[\s·：:，,。.!！?？\-—()（）《》【】\[\]]+/g, '')
+      .trim();
+  const isTitleMatch = (watch, candidateTitle) => {
+    const cand = normalizeTitle(candidateTitle);
+    if (!cand) return false;
+    const terms = [watch.title, ...(watch.aliases || [])].map(normalizeTitle).filter(Boolean);
+    for (const term of terms) {
+      if (cand === term || cand.includes(term) || term.includes(cand)) return true;
+      for (const group of ALIAS_GROUPS) {
+        if (
+          group.some((g) => term.includes(g) || g.includes(term)) &&
+          group.some((g) => cand.includes(g) || g.includes(cand))
+        ) {
+          return true;
+        }
+      }
+    }
+    return false;
+  };
+
   for (const watch of config.watchlist) {
     if (watch.manuallyStopped) continue;
     const matched = allSlots.filter((slot) => {
-      const titleHit = slot.movieTitle.includes(watch.title) || watch.title.includes(slot.movieTitle);
-      if (!titleHit) return false;
+      if (!isTitleMatch(watch, slot.movieTitle)) return false;
       if (watch.targetFormats.includes('全制式')) return true;
       return watch.targetFormats.some((f) => `${slot.format} ${slot.hallName}`.toLowerCase().includes(f.toLowerCase()));
     });

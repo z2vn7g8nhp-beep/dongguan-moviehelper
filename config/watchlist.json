@@ -18,17 +18,16 @@
   ],
   "watchlist": [
     {
-      "title": "奥德赛",
+      "title": "复仇者联盟5",
+      "aliases": [
+        "复联5",
+        "毁灭之日",
+        "毁灭日",
+        "Avengers: Doomsday"
+      ],
       "targetFormats": [
         "IMAX GT",
         "IMAX"
-      ],
-      "manuallyStopped": false
-    },
-    {
-      "title": "哪吒之沧海龙吟",
-      "targetFormats": [
-        "全制式"
       ],
       "manuallyStopped": false
     }

@@ -16,6 +16,11 @@ permissions:
   contents: write
   issues: write
 
+# 防止 cron-job.org 外部触发与 GitHub 自带 schedule 同时运行导致提交冲突
+concurrency:
+  group: dongguan-imax-monitor
+  cancel-in-progress: false
+
 jobs:
   monitor-dongguan-imax:
     runs-on: ubuntu-latest
@@ -51,5 +56,6 @@ jobs:
           if [ -n "$(git status --porcelain .monitor-cache)" ]; then
             git add .monitor-cache/seen-shows.json
             git commit -m "chore: update dongguan imax seen rounds [skip ci]"
+            git pull --rebase --autostash origin "${{ github.ref_name }}" || true
             git push
           fi
